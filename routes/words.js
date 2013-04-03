@@ -28,3 +28,19 @@ exports.list = function(req, res) {
     }
   });
 };
+
+exports.detail = function(req, res, next) {
+  var word = req.params.word;
+  var etherpad = req.app.get('etherpad');
+  etherpad.listAllPads(function(err, data) {
+    if (err) return next(err.message);
+    // DOES NOT WORKS
+    // data.padIDs.forEach(function(padID) {
+    //   etherpad.getText(padID, function(err, data) {
+    //     if (err) return next(err.message);
+    //     // Work with content
+    //   });
+    // });
+    res.json(data.padIDs);
+  });
+};
