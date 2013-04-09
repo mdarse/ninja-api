@@ -1,4 +1,3 @@
-
 exports.top = function(req, res) {
   res.json({
     "ninja": {
@@ -35,12 +34,12 @@ exports.detail = function(req, res, next) {
   etherpad.listAllPads(function(err, data) {
     if (err) return next(err.message);
     // DOES NOT WORKS
-    // data.padIDs.forEach(function(padID) {
-    //   etherpad.getText(padID, function(err, data) {
-    //     if (err) return next(err.message);
-    //     // Work with content
-    //   });
-    // });
+    data.padIDs.forEach(function(padID) {
+      etherpad.getText(padID, function(err, data) {
+        if (err) return next(err.message);
+          // Work with content
+        });
+    });
     res.json(data.padIDs);
   });
 };

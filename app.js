@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express')
   , api = require('etherpad-lite-client')
   , routes = require('./routes')
@@ -24,8 +23,8 @@ if ('development' == app.get('env')) {
 }
 
 var etherpad = api.connect({
-  apikey: 'eUY5aSzUgFlxhXrEAywOKaoSMQYFw6Aj',
-  host: '10.40.75.115',
+  apikey: 'm4Qy2rPivnCqmu0K23gNEwAew0xd0yu7', // replace with your own
+  host: '127.0.0.1',
   port: 9001
 });
 app.set('etherpad', etherpad);
