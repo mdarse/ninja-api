@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" /> 
+		<title></title>
+		<link rel="stylesheet" type="text/css" media="all" href="style.css" />
+		<link href='http://fonts.googleapis.com/css?family=Londrina+Shadow' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Vibur' rel='stylesheet' type='text/css'>
+
+	</head>
+	<body>
+		<header>
+			<h1>Have <span>fun</span> in 3 steps</h1>
+		</header>
+		<article>
+			<section id="pad">
+				<h2><span class="nb">1</span>Choose your Pad</h2>
+				<!-- on récupère tous les pads avec /texts -->
+				<form method="" action="">
+					<select>
+						<option value="Pad 1">Pad 1</option>
+						<option value="Pad 2">Pad 2</option>
+						<option value="Pad 3">Pad 3</option>
+						<option value="Pad 4">Pad 4</option>
+					</select>
+					<input type="submit" value="ok">
+				</form>
+				<!-- on récupère le text du pad avec /texts/<id> -->
+				<div>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida justo at leo posuere vitae pharetra sem vehicula. Ut venenatis tellus vel enim pharetra et molestie lacus dignissim. Suspendisse non ante velit. Duis nunc est, sollicitudin non imperdiet et, sagittis et turpis. Sed condimentum ipsum ac nulla vulputate vulputate. Aenean varius pretium egestas. Sed ac est facilisis lacus cursus luctus nec ac nisl. Quisque vitae eros velit. Integer aliquam pellentesque sapien, ac adipiscing ipsum vehicula ac. Proin sollicitudin, nibh nec elementum ullamcorper, orci nulla laoreet lorem, sed dignissim dui tortor vel turpis.
+				</div>
+			</section>
+
+			<section id="text">
+				<h2><span class="nb">2</span>Select your text</h2>
+				<!-- on récupère strong & em avec /texts/<id>/get (ou on le laisse en dur) -->
+				<!-- ATTENTION leur api ne permet pas de transformer des élements choisis, mais seulement le texte d'un pad -->
+				<form method="" action="">
+					<input type="radio" name="" value="all content"><label>all content</label>
+					<input type="radio" name="" value="<strong> elements"><label>< strong > elements</label>
+					<input type="radio" name="" value="<em> elements"><label>< em > elements</label>
+					<input type="submit" value="ok">
+				</form>
+			</section>
+
+			<section id="transformation">
+				<h2><span class="nb">3</span>Apply a transformation</h2>	
+				<!-- on récupère liste transformation avec /texts/<id>/transform (ou on le laisse en dur) -->
+				<ul>
+					<li>bin</li>
+					<li>hexa</li>
+					<li>base36</li>
+					<li>hangman</li>
+					<li>vowel</li>
+					<li>specialChar</li>
+				</ul>
+				<!-- /texts/<id>/get/<type> OU texte entier du pad + /texts/<id>/transform/<type> -->				
+				<div>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida justo at leo posuere vitae pharetra sem vehicula. Ut venenatis tellus vel enim pharetra et molestie lacus dignissim. Suspendisse non ante velit. Duis nunc est, sollicitudin non imperdiet et, sagittis et turpis. Sed condimentum ipsum ac nulla vulputate vulputate. Aenean varius pretium egestas. Sed ac est facilisis lacus cursus luctus nec ac nisl. Quisque vitae eros velit. Integer aliquam pellentesque sapien, ac adipiscing ipsum vehicula ac. Proin sollicitudin, nibh nec elementum ullamcorper, orci nulla laoreet lorem, sed dignissim dui tortor vel turpis.
+				</div>
+			</section>
+		</article>
+		<footer>
+			copyright © 2013 <a href="https://github.com/mdarse/ninja-api">Ninjas</a>
+		</footer>
+	</body>
+</html>
