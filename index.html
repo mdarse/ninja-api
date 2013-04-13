@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" /> 
 		<title></title>
-		<link rel="stylesheet" type="text/css" media="all" href="style.css" />
+		<link rel="stylesheet" type="text/css" media="all" href="style/style.css" />
 		<link href='http://fonts.googleapis.com/css?family=Londrina+Shadow' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Vibur' rel='stylesheet' type='text/css'>
 
@@ -31,33 +31,21 @@
 				</div>
 			</section>
 
-			<section id="text">
-				<h2><span class="nb">2</span>Select your text</h2>
-				<!-- on récupère strong & em avec /texts/<id>/get (ou on le laisse en dur) -->
-				<!-- ATTENTION leur api ne permet pas de transformer des élements choisis, mais seulement le texte d'un pad -->
-				<form method="" action="">
-					<input type="radio" name="" value="all content"><label>all content</label>
-					<input type="radio" name="" value="<strong> elements"><label>< strong > elements</label>
-					<input type="radio" name="" value="<em> elements"><label>< em > elements</label>
-					<input type="submit" value="ok">
-				</form>
-			</section>
-
 			<section id="transformation">
-				<h2><span class="nb">3</span>Apply a transformation</h2>	
+				<h2><span class="nb">2</span>Apply a transformation</h2>	
 				<!-- on récupère liste transformation avec /texts/<id>/transform (ou on le laisse en dur) -->
 				<ul>
-					<li>bin</li>
-					<li>hexa</li>
-					<li>base36</li>
-					<li>hangman</li>
-					<li>vowel</li>
-					<li>specialChar</li>
+					<li><p>binary</p><p class="ex">01100010 01101001 01101110</p></li>
+					<li><p>hexadecimal</p><p class="ex">68657861</p></li>
+					<li><p>base36</p><p class="ex">12CCXEDCMU</p></li>
+					<li><p>hangman</p><p class="ex">h _ _ _ _ _ n</p></li>
+					<li><p>vowelless</p><p class="ex">vwllss</p></li>
 				</ul>
 				<!-- /texts/<id>/get/<type> OU texte entier du pad + /texts/<id>/transform/<type> -->
 			</section>
 
-			<section id="result">				
+			<section id="result">	
+				<h2><span class="nb">3</span>Have fun</h2>				
 				<div>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida justo at leo posuere vitae pharetra sem vehicula. Ut venenatis tellus vel enim pharetra et molestie lacus dignissim. Suspendisse non ante velit. Duis nunc est, sollicitudin non imperdiet et, sagittis et turpis. Sed condimentum ipsum ac nulla vulputate vulputate. Aenean varius pretium egestas. Sed ac est facilisis lacus cursus luctus nec ac nisl. Quisque vitae eros velit. Integer aliquam pellentesque sapien, ac adipiscing ipsum vehicula ac. Proin sollicitudin, nibh nec elementum ullamcorper, orci nulla laoreet lorem, sed dignissim dui tortor vel turpis.</p>
 				</div>
