@@ -1,5 +1,5 @@
 /*
- * General 
+ * General
  */
 
 body {
@@ -40,7 +40,7 @@ header {
 }
 
 /*
- * Content 
+ * Content
  */
 
 article {
@@ -58,7 +58,7 @@ h2 {
 	position: relative;
 }
 
-.nb {	
+.nb {
 	background: #00e68e;
 	border-radius: 100px;
 	color: #eee;
@@ -181,7 +181,7 @@ li.active {
 }
 
 /* step 3 : result */
-#result div {	
+#result div {
 	border: solid 10px #00e68e;
 }
 
