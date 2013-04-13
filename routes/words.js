@@ -36,42 +36,45 @@ exports.list = function(req, res) {
 
 exports.detail = function(req, res, next) {
   var word = req.params.word;
+  var wordCounter = new WordCounter(word);
   var etherpad = req.app.get('etherpad');
-  var occurences = 1; // init occurences variable
+
   etherpad.listAllPads(function(err, data) {
     if (err) return next(err.message);
-    data.padIDs.forEach(function(padID){
-      var rev = [];
-      rev.padID = padID;
-      //console.log(util.inspect(arrayTest));
-      etherpad.getText(rev, function(err, data) {
+    var padIDs = data.padIDs || [];
+    // synchronization step when word counts is done on all pads
+    var count = 0;
+    function callback() {
+      count++;
+      if (count == padIDs.length) {
+        var data = {};
+        data[word] = { occurrences: wordCounter.getOccurrences() };
+        res.send(data);
+      }
+    }
+    // loop over pads to compute word counts
+    padIDs.forEach(function(padID) {
+      etherpad.getText({ padID: padID }, function(err, data) {
         if (err) return next(err.message);
-        occurences += countWordOccurencesInContentPad(data, word); // increments number of occurences for each pad
-        console.log(occurences);
+        wordCounter.addText(data.text);
+        callback();
       });
     });
   });
-  res.send({
-    word: {
-      "occurences": occurences
-    }
-  });
 };
 
-/**
-* count the occurence of the word in the content with a regexp
-*
-* @param object content
-* @param string word
-* @return int number of occurences
-*/
-function countWordOccurencesInContentPad(content, word) {
-  var text = content.text;
-  var regex = new RegExp( word, 'g' ); // g = search in global text
-  var count = text.match(regex); // match the regex
-  if (count !== null) { // if results exists
-    return count.length; // return number of occurences
-  } else {
-    return 0; // 0 occurence of the word in the pad
-  }
+
+// WordCounter Object
+function WordCounter(word) {
+  this.occurrences = 0;
+  this.regex = new RegExp(word, 'gi'); // g = global search, i = case insensitive
 }
+
+WordCounter.prototype.addText = function(text) {
+  var matches = text.match(this.regex);
+  this.occurrences += (matches === null) ? 0 : matches.length;
+};
+
+WordCounter.prototype.getOccurrences = function() {
+  return this.occurrences;
+};
