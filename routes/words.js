@@ -16,20 +16,21 @@ exports.top = function(req, res, next) {
   });
 };
 
-exports.list = function(req, res) {
-  res.json({
-    "caca": {
-      "occurrences": 2,
-      "rank": 75
-    },
-    "cacahuete": {
-      "occurrences": 31,
-      "rank": 24
-    },
-    "cacao": {
-      "occurrences": 12,
-      "rank": 51
+exports.list = function(req, res, next) {
+  var filter = canonicalWord(req.query.q),
+      limit  = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Limit to 100 items
+  var etherpad = req.app.get('etherpad');
+
+  getAllPads(etherpad, function(err, pads) {
+    if (err) return next(err);
+
+    var ranking = makeRanking(pads),
+        words = {};
+    for (var key in ranking) {
+      if (filter && key.indexOf(filter) === -1) continue;
+      words[key] = ranking[key];
     }
+    res.json(words);
   });
 };
 
