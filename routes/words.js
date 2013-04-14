@@ -1,4 +1,5 @@
 var WordCounter = require('../lib/wordcounter.js');
+var removeDiacitics = require('../lib/remove-diacritics.js');
 
 exports.top = function(req, res) {
   res.json({
@@ -80,3 +81,6 @@ function getAllPads(etherpadClient, callback) {
 
 
 
+function canonicalWord(word) {
+  return removeDiacitics(word).toLowerCase();
+}
