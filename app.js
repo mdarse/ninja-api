@@ -23,9 +23,9 @@ if ('development' == app.get('env')) {
 }
 
 var etherpad = api.connect({
-  apikey: 'm4Qy2rPivnCqmu0K23gNEwAew0xd0yu7', // replace with your own
-  host: '127.0.0.1',
-  port: 9001
+  apikey: process.env.ETHERPAD_SECRET,
+  host: process.env.ETHERPAD_HOST || '127.0.0.1',
+  port: process.env.ETHERPAD_PORT || 9001
 });
 app.set('etherpad', etherpad);
 
