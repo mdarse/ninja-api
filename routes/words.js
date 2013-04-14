@@ -34,20 +34,15 @@ exports.list = function(req, res) {
 };
 
 exports.detail = function(req, res, next) {
-  var word = req.params.word;
+  var key = canonicalWord(req.params.word);
   var etherpad = req.app.get('etherpad');
 
   getAllPads(etherpad, function(err, pads) {
     if (err) return next(err);
 
-    var wordCounter = new WordCounter(word);
-    pads.forEach(function(pad) {
-      wordCounter.addText(pad.text);
-    });
-
-    var data = {};
-    data[word] = { occurrences: wordCounter.getOccurrences() };
-    res.send(data);
+    var ranking = makeRanking(pads),
+        word = ranking[key];
+    res.json(word || { occurrences: 0 });
   });
 };
 
@@ -84,6 +79,29 @@ function getAllPads(etherpadClient, callback) {
 var wordRegEx = /[\wÀ-ÿ\-'’]+/gi;
 
 function makeRanking(pads, size) {
+  var words = findWords(pads);
+
+  // Sort words
+  var sortable = [];
+  for (var key in words)
+    sortable.push([words[key].occurrences, key]);
+  sortable.sort(function(a, b) {
+    return b[0] - a[0]; // reverse sorting order
+  });
+
+  // Build ranking
+  var ranking = {};
+  sortable.slice(0, size).forEach(function(item, index) {
+    var key = item[1],
+        word = words[key];
+    word.rank = index + 1;
+    ranking[key] = word;
+  });
+  return ranking;
+}
+
+
+function findWords(pads) {
   var words = {};
 
   pads.forEach(function(pad) {
@@ -107,23 +125,7 @@ function makeRanking(pads, size) {
     });
   });
 
-  // Sort words
-  var sortable = [];
-  for (var key in words)
-    sortable.push([words[key].occurrences, key]);
-  sortable.sort(function(a, b) {
-    return b[0] - a[0]; // reverse sorting order
-  });
-
-  // Build ranking
-  var ranking = {};
-  sortable.slice(0, size).forEach(function(item, index) {
-    var key = item[1],
-        word = words[key];
-    word.rank = index + 1;
-    ranking[key] = word;
-  });
-  return ranking;
+  return words;
 }
 
 
