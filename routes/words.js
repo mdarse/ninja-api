@@ -32,32 +32,50 @@ exports.list = function(req, res) {
 
 exports.detail = function(req, res, next) {
   var word = req.params.word;
-  var wordCounter = new WordCounter(word);
   var etherpad = req.app.get('etherpad');
 
-  etherpad.listAllPads(function(err, data) {
-    if (err) return next(err.message);
-    var padIDs = data.padIDs || [];
-    // synchronization step when word counts is done on all pads
-    var count = 0;
-    function callback() {
-      count++;
-      if (count == padIDs.length) {
-        var data = {};
-        data[word] = { occurrences: wordCounter.getOccurrences() };
-        res.send(data);
-      }
-    }
-    // loop over pads to compute word counts
+  getAllPads(etherpad, function(err, pads) {
+    if (err) return next(err);
+
+    var wordCounter = new WordCounter(word);
+    pads.forEach(function(pad) {
+      wordCounter.addText(pad.text);
+    });
+
+    var data = {};
+    data[word] = { occurrences: wordCounter.getOccurrences() };
+    res.send(data);
+  });
+};
+
+
+function getAllPads(etherpadClient, callback) {
+  // Get all pad IDs
+  etherpadClient.listAllPads(function(err, data) {
+    if (err) return callback(err.message);
+    var padIDs = data.padIDs || [],
+        pads = [],
+        remaining = padIDs.length;
+
+    // With zero padIDs, callback will never be called
+    if (padIDs.length === 0)
+      return callback(null, []);
+
+    // Get the text of each pad
     padIDs.forEach(function(padID) {
-      etherpad.getText({ padID: padID }, function(err, data) {
-        if (err) return next(err.message);
-        wordCounter.addText(data.text);
-        callback();
+      etherpadClient.getText({ padID: padID }, function(err, data) {
+        if (err) callback(err.message);
+        pads.push({
+          id: padID,
+          text: data.text
+        });
+        // synchronization step when all pads are received
+        if (--remaining === 0)
+          callback(null, pads);
       });
     });
   });
-};
+}
 
 
 
