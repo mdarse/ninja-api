@@ -77,7 +77,7 @@ function getAllPads(etherpadClient, callback) {
 }
 
 
-var wordRegEx = /[\wÀ-ÿ\-'’]+/gi;
+var wordRegEx = /[\wÀ-ÿ\-'’’]+/gi;
 
 function makeRanking(pads, size) {
   var words = findWords(pads);
