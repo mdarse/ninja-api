@@ -17,7 +17,7 @@ exports.top = function(req, res, next) {
 };
 
 exports.list = function(req, res, next) {
-  var filter = canonicalWord(req.query.q),
+  var filter = canonicalWord(req.query.q || ''),
       limit  = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Limit to 100 items
   var etherpad = req.app.get('etherpad');
 
