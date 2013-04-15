@@ -1,13 +1,12 @@
 var apiURL = '<API URL>'; // URL to call apisEtherpad
-var listHTMLTransformationChoice = { "bin" : "<li id="bin"><p>binary</p><p class="ex">01100010 01101001 01101110</p></li>",
-                                     "hexa" : "<li id="hexa"><p>hexadecimal</p><p class="ex">68657861</p></li>",
-                                     "base36": "<li id="base36"><p>base36</p><p class="ex">12CCXEDCMU</p></li>",
-                                     "hangman": "<li id="hangman"><p>hangman</p><p class="ex">h _ _ _ _ _ n</p></li>",
-                                     "vowel": "<li id="vowel"><p>vowelless</p><p class="ex">vwllss</p></li>"
-                                   };
+var listHTMLTransformationChoice = {
+    bin: '<li id="bin"><p>binary</p><p class="ex">01100010 01101001 01101110</p></li>',
+    hexa: '<li id="hexa"><p>hexadecimal</p><p class="ex">68657861</p></li>',
+    base36: '<li id="base36"><p>base36</p><p class="ex">12CCXEDCMU</p></li>',
+    hangman: '<li id="hangman"><p>hangman</p><p class="ex">h _ _ _ _ _ n</p></li>',
+    vowel: '<li id="vowel"><p>vowelless</p><p class="ex">vwllss</p></li>'
+};
 
-// When DOM is loading...
-$(document).ready(function(){
 
     /**
     * GET JSON DATA IN AJAX
@@ -17,7 +16,7 @@ $(document).ready(function(){
     */
     function getJsonDataInAjax(path) {
 
-        Jquery.ajax({
+        $.ajax({
             url: apiURL+path,
             dataType: 'json',
             error: function(error){
@@ -26,7 +25,7 @@ $(document).ready(function(){
             },
             success: function(results){
                 return results;
-            },
+            }
         });
     }
 
@@ -36,15 +35,14 @@ $(document).ready(function(){
     *
     */
     function getAllPadID() {
-        var allPadID = getJsonDataInAjax('/texts'); // get all pad ID
-        allPadID = jQuery.parseJSON(allPadID); // json object allPadID become an object
+        var data = getJsonDataInAjax('/texts'), // get all pad ID
+            allPadID = JSON.parse(data).data || [],
+            html;
 
-        if(allPadID.data){
-            for each(padID in allPadID.data) {
-                var html += "<option value='"+padID+"'>"+padID+"</option>";
-            }
-            $("#pad form select").innerHTML(html);
-        }
+        allPadID.forEach(function(padID) {
+            html += "<option value='"+padID+"'>"+padID+"</option>";
+        });
+        $("#pad form select").html(html);
     }
 
 
@@ -54,11 +52,11 @@ $(document).ready(function(){
     * @param int padID
     */
     function getTextOfThisPad() {
-        var text = getJsonDataInAjax('/texts/'+selectedPadID); // get all pad ID
-        text = jQuery.parseJSON(text); // json object allPadID become an object
+        var data = getJsonDataInAjax('/texts/'+selectedPadID); // get all pad ID
+            text = JSON.parse(data).data || [];
 
-        if(text.data){
-            $("#padText p").innerHTML(text.data);
+        if(text){
+            $("#padText p").html(text);
         }
 
     }
@@ -69,17 +67,16 @@ $(document).ready(function(){
     *
     */
     function getAllTransformationType(){
-        var allTransformationType = getJsonDataInAjax('/texts/'+selectedPadID+'/transform'); // get all transformation
-        allTransformationType = jQuery.parseJSON(allTransformationType); // json object allTransformationType become an object
+        var data = getJsonDataInAjax('/texts/'+selectedPadID+'/transform'); // get all transformation
+            allTransformationType = JSON.parse(data).data || [],
+            html;
 
-        if(allTransformationType.data){
-            for each(TransformationType in allTransformationType.data) {
-                if(document.listHTMLTransformationChoice[TransformationType]){
-                    var html += listHTMLTransformationChoice[TransformationType];
-                }
+        allTransformationType.forEach(function(TransformationType) {
+            if(document.listHTMLTransformationChoice[TransformationType]){
+                html += listHTMLTransformationChoice[TransformationType];
             }
-            $("#transformation ul").innerHTML(html);
-        }
+        });
+        $("#transformation ul").html(html);
     }
 
 
@@ -89,23 +86,27 @@ $(document).ready(function(){
     * @param object event
     */
     function makeTransformation(event) {
-        var transformationResult = getJsonDataInAjax('/texts/'+selectedPadID+'/transform/'+this.id); // get transformation result
-        transformationResult = jQuery.parseJSON(transformationResult); // json object transformationResult become an object
+        var data = getJsonDataInAjax('/texts/'+selectedPadID+'/transform/'+this.id); // get transformation result
+            transformationResult = JSON.parse(data).data || [],
 
-        if(transformationResult.data){
-            $("#resultText p").innerHTML(transformationResult.data);
-        }
+        $("#resultText p").html(transformationResult);
 
     }
 
-
+// When DOM is loading...
+$(document).ready(function(){
+    
     getAllPadID();
 
-    selectedPadID = $('#pad option:selected').val();
-    getTextOfThisPad();
+    $("#pad option").on('change', function(e){
 
-    getAllTransformationType();
+        selectedPadID = $('#pad option:selected').val();
+        getTextOfThisPad();
 
-    $("#transformation ul li").addEventListener("click", makeTransformation, false);
+        getAllTransformationType();
 
-}
+        $("#transformation ul li").addEventListener("click", makeTransformation, false);
+
+    });
+
+});
