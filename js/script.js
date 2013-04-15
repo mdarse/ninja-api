@@ -18,7 +18,7 @@ $(document).ready(function(){
     function getJsonDataInAjax(path) {
 
         Jquery.ajax({
-            url: document.apiURL+path,
+            url: apiURL+path,
             dataType: 'json',
             error: function(error){
                 console.log('Error when connected to the API : ');
@@ -28,7 +28,6 @@ $(document).ready(function(){
                 return results;
             },
         });
-
     }
 
 
@@ -42,8 +41,9 @@ $(document).ready(function(){
 
         if(allPadID.data){
             for each(padID in allPadID.data) {
-                $("#pad form select").innerHTML("<option value='"+padID+"'>"+padID+"</option>");
+                var html += "<option value='"+padID+"'>"+padID+"</option>";
             }
+            $("#pad form select").innerHTML(html);
         }
     }
 
@@ -75,14 +75,19 @@ $(document).ready(function(){
         if(allTransformationType.data){
             for each(TransformationType in allTransformationType.data) {
                 if(document.listHTMLTransformationChoice[TransformationType]){
-                    $("#transformation ul").innerHTML(document.listHTMLTransformationChoice[TransformationType]);
+                    var html += listHTMLTransformationChoice[TransformationType];
                 }
             }
+            $("#transformation ul").innerHTML(html);
         }
-
     }
 
 
+    /**
+    * MAKE TRANSFORMATION
+    * 
+    * @param object event
+    */
     function makeTransformation(event) {
         var transformationResult = getJsonDataInAjax('/texts/'+selectedPadID+'/transform/'+this.id); // get transformation result
         transformationResult = jQuery.parseJSON(transformationResult); // json object transformationResult become an object
